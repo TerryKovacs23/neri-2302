@@ -1,3 +1,7 @@
+# Modelo de negocio
+
+Casa de apuestas de carreras de caracoles. Nombre: Slow Rush
+
 # Especificación de Arquitectura de Solución: Monolito Modular
 
 ## 1. Diseño General de la Solución
@@ -23,14 +27,14 @@ Aísla las definiciones de tipo y contratos de datos reutilizables entre el clie
 * Tipos para los estados de transacción (aprobado, rechazado, error de sistema)[span_18](start_span)[span_18](end_span)[span_19](start_span)[span_19](end_span).
 
 ### 2.2 Aplicación Cliente (`packages/client`)
-Diseñada bajo el enfoque *Feature-First Architecture*, dividiendo la UI y el estado por dominio funcional[span_20](start_span)[span_20](end_span).
-* **Capa Core / Presentación General:** Componentes reutilizables de UI y estructuras de maquetación (layouts)[span_21](start_span)[span_21](end_span).
+Diseñada bajo el enfoque *Feature-First Architecture*, dividiendo la UI y el estado por dominio funcional[span_28](start_span)[span_28](end_span).
+* **Capa Core / Presentación General:** Componentes genéricos envoltura de MUI, configuración global del tema (`ThemeProvider` de MUI) y estructuras de maquetación (`Layouts`)[span_29](start_span)[span_29](end_span)[span_30](start_span)[span_30](end_span).
 * **Capa de Módulos (Features):**
-  * **Módulo de Autenticación (`auth`):** Gestión del registro, inicio de sesión, protección de rutas y ciclo de vida de la sesión[span_22](start_span)[span_22](end_span)[span_23](start_span)[span_23](end_span).
-  * **Módulo de Dashboard (`dashboard`):** Visualización del perfil del usuario, saldo actual y componentes de renderizado gráfico de métricas simuladas[span_24](start_span)[span_24](end_span)[span_25](start_span)[span_25](end_span).
-  * **Módulo de Pasarela (`snailpay`):** Captura de datos de tarjeta, envío de solicitudes de recarga y procesamiento de notificaciones de estado[span_26](start_span)[span_26](end_span)[span_27](start_span)[span_27](end_span).
-* **Capa de Servicios y Persistencia:** Abstracción unificada y fuertemente tipada para las operaciones de lectura/escritura en `LocalStorage`[span_28](start_span)[span_28](end_span)[span_29](start_span)[span_29](end_span).
-* **Capa de Enrutamiento:** Control de navegación y guards para restricción de acceso a vistas protegidas[span_30](start_span)[span_30](end_span)[span_31](start_span)[span_31](end_span).
+  * **Módulo de Autenticación (`auth`):** Formularios de registro/login construidos con `TextField` y `Button` de MUI, gestión de estado de sesión y protección de rutas[span_31](start_span)[span_31](end_span)[span_32](start_span)[span_32](end_span)[span_33](start_span)[span_33](end_span).
+  * **Módulo de Dashboard (`dashboard`):** Visualización del perfil del usuario mediante `Cards` de MUI, indicador visual de saldo y componentes de renderizado gráfico de métricas simuladas[span_34](start_span)[span_34](end_span)[span_35](start_span)[span_35](end_span)[span_36](start_span)[span_36](end_span).
+  * **Módulo de Pasarela (`snailpay`):** Captura de datos de tarjeta mediante `Dialog` (modal) de MUI, manejo de estados de carga con `CircularProgress` e indicadores de retroalimentación con `Alert`[span_37](start_span)[span_37](end_span)[span_38](start_span)[span_38](end_span)[span_39](start_span)[span_39](end_span).
+* **Capa de Servicios y Persistencia:** Abstracción unificada y fuertemente tipada para las operaciones de lectura/escritura en `LocalStorage`[span_40](start_span)[span_40](end_span)[span_41](start_span)[span_41](end_span).
+* **Capa de Enrutamiento:** Control de navegación mediante React Router con componentes guardián para vistas protegidas[span_42](start_span)[span_42](end_span)[span_43](start_span)[span_43](end_span).
 
 ### 2.3 Aplicación Servidor (`packages/server`)
 Diseñada como una API REST sin estado (*stateless*), desacoplada por módulos de servicio[span_32](start_span)[span_32](end_span)[span_33](start_span)[span_33](end_span).
@@ -86,9 +90,10 @@ packages/
 
 ---
 
-## 4. Reglas de Generación de Código
+# Reglas de Generación de Código
 1. No alterar la estructura `npm workspaces`.
 2. Frontend: Aplicar Feature-First Architecture. Separar estrictamente UI, módulos (auth, dashboard, snailpay), capa de servicios de LocalStorage y enrutamiento[span_11](start_span)[span_11](end_span).
+3. Frontend: Utilizar únicamente componentes de `@mui/material` y `@mui/icons-material` para la interfaz gráfica[span_20](start_span)[span_20](end_span).
 3. Backend: API REST stateless. Separar configuración, middlewares (validación, manejo de errores, chaos engineering) y controlador/servicio para SnailPay[span_12](start_span)[span_12](end_span).
 4. Flujo de Trabajo: Trunk-Based Development y Conventional Commits[span_13](start_span)[span_13](end_span)[span_14](start_span)[span_14](end_span).
 5. Calidad: Aplicar tipado estricto, separación de responsabilidades y manejo de errores consistente[span_15](start_span)[span_15](end_span).
