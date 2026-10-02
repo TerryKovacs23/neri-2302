@@ -1,13 +1,14 @@
-import { useState } from 'react'
-import type { RegisteredUser } from '@app/shared'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import RegisterForm from './modules/auth/components'
+import ProtectedRoute from './modules/auth/components/ProtectedRoute'
+import { AuthProvider, useAuth } from './modules/auth/context/index'
 import LoginForm from './modules/auth/components/LoginForm'
 import Dashboard from './modules/dashboard/components/Dashboard'
 import './App.css'
 
-function App() {
-  const [view, setView] = useState<'register' | 'login' | 'dashboard'>('register')
-  const [user, setUser] = useState<RegisteredUser | null>(null)
+function AppRoutes() {
+  const { user, signIn, signOut } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <main className="registration-page">
@@ -23,21 +24,55 @@ function App() {
         <div className="brand-footer">La emoción de las carreras, a su propio ritmo.</div>
       </aside>
       <div className="form-stage">
-        {view === 'register' && <RegisterForm onLogin={() => setView('login')} />}
-        {view === 'login' && (
-          <LoginForm
-            onLogin={(authenticatedUser) => {
-              setUser(authenticatedUser)
-              setView('dashboard')
-            }}
-            onRegister={() => setView('register')}
+        <Routes>
+          <Route
+            path="/"
+            element={<RegisterForm onLogin={() => navigate('/login')} />}
           />
-        )}
-        {view === 'dashboard' && user && (
-          <Dashboard user={user} />
-        )}
+          <Route
+            path="/login"
+            element={
+              <LoginForm
+                onLogin={(authenticatedUser) => {
+                  signIn(authenticatedUser)
+                  navigate('/dashboard', { replace: true })
+                }}
+                onRegister={() => navigate('/', { replace: true })}
+              />
+            }
+          />
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="/dashboard"
+              element={
+                user ? (
+                  <Dashboard
+                    user={user}
+                    onLogout={() => {
+                      signOut()
+                      navigate('/login', { replace: true })
+                    }}
+                  />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </div>
     </main>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

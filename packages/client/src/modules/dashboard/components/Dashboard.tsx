@@ -1,4 +1,6 @@
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -6,9 +8,10 @@ import type { RegisteredUser } from '@app/shared';
 
 interface DashboardProps {
 	user: RegisteredUser;
+	onLogout: () => void;
 }
 
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard({ user, onLogout }: DashboardProps) {
 	const balance = new Intl.NumberFormat('es-MX', {
 		style: 'currency',
 		currency: 'USD',
@@ -24,6 +27,13 @@ export default function Dashboard({ user }: DashboardProps) {
 						¡Hola, {user.fullName}!
 					</Typography>
 				</div>
+				<Button
+					variant="outlined"
+					startIcon={<LogoutOutlinedIcon />}
+					onClick={onLogout}
+				>
+					Cerrar sesión
+				</Button>
 			</div>
 			<Typography component="p" className="form-description">
 				Tu próxima carrera empieza despacio. ¿Listo para elegir a tu favorito?

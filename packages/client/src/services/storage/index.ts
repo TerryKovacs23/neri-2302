@@ -1,7 +1,30 @@
-import type { RegisteredUser, StoredUser } from '@app/shared';
+import type { AuthSession, RegisteredUser, StoredUser } from '@app/shared';
 
 const USERS_STORAGE_KEY = 'slow-rush.users';
 const LEGACY_USERS_STORAGE_KEY = 'neri.users';
+const SESSION_STORAGE_KEY = 'slow-rush.session';
+
+function isAuthSession(value: unknown): value is AuthSession {
+	if (typeof value !== 'object' || value === null || !('user' in value)) {
+		return false;
+	}
+
+	const user = value.user;
+	return (
+		typeof user === 'object' &&
+		user !== null &&
+		'id' in user &&
+		typeof user.id === 'string' &&
+		'fullName' in user &&
+		typeof user.fullName === 'string' &&
+		'email' in user &&
+		typeof user.email === 'string' &&
+		'balance' in user &&
+		typeof user.balance === 'number' &&
+		'createdAt' in user &&
+		typeof user.createdAt === 'string'
+	);
+}
 
 function readUsers(): StoredUser[] {
 	try {
@@ -55,4 +78,32 @@ export function authenticateStoredUser(
 		balance: user.balance,
 		createdAt: user.createdAt,
 	};
+}
+
+export function readActiveSession(): AuthSession | null {
+	const storedSession = localStorage.getItem(SESSION_STORAGE_KEY);
+	if (!storedSession) {
+		return null;
+	}
+
+	try {
+		const session: unknown = JSON.parse(storedSession);
+		if (isAuthSession(session)) {
+			return session;
+		}
+	} catch {
+		localStorage.removeItem(SESSION_STORAGE_KEY);
+		return null;
+	}
+
+	localStorage.removeItem(SESSION_STORAGE_KEY);
+	return null;
+}
+
+export function saveActiveSession(user: RegisteredUser): void {
+	localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ user } satisfies AuthSession));
+}
+
+export function clearActiveSession(): void {
+	localStorage.removeItem(SESSION_STORAGE_KEY);
 }

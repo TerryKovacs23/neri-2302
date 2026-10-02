@@ -26,6 +26,10 @@ export interface LoginUserResponse {
   user: RegisteredUser;
 }
 
+export interface AuthSession {
+  user: RegisteredUser;
+}
+
 export interface ApiErrorResponse {
   message: string;
 }
