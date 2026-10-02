@@ -17,6 +17,15 @@ export interface RegisterUserResponse {
   user: RegisteredUser;
 }
 
+export interface LoginUserRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginUserResponse {
+  user: RegisteredUser;
+}
+
 export interface ApiErrorResponse {
   message: string;
 }

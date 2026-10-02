@@ -3,9 +3,8 @@ import type {
   RegisterUserRequest,
   RegisterUserResponse,
 } from '@app/shared';
+import { resolveApiUrl } from '../../../config/api';
 import { emailIsRegistered, saveRegisteredUser } from '../../../services/storage/index';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
 export async function registerAccount(
   request: RegisterUserRequest,
@@ -16,7 +15,7 @@ export async function registerAccount(
 
   let response: Response;
   try {
-    response = await fetch(`${API_URL}/api/auth/register`, {
+    response = await fetch(`${resolveApiUrl()}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),

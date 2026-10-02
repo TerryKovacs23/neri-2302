@@ -199,6 +199,48 @@
   font-weight: 700;
 }
 
+.privacy-note .MuiButton-root {
+  min-width: 0;
+  padding: 0 4px;
+  text-transform: none;
+}
+
+.dashboard-panel {
+  width: min(100%, 620px);
+}
+
+.dashboard-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dashboard-heading .form-title {
+  overflow-wrap: anywhere;
+}
+
+.dashboard-balance {
+  border-color: #dce4dc;
+  border-radius: 8px;
+}
+
+.dashboard-balance .MuiCardContent-root {
+  padding: 22px;
+}
+
+.dashboard-balance .balance-label {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.dashboard-balance .balance-value {
+  color: var(--ink);
+  font-size: 28px;
+  font-weight: 700;
+}
+
 @keyframes appear {
   from { opacity: 0; transform: translateY(9px); }
   to { opacity: 1; transform: translateY(0); }

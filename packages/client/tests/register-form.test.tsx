@@ -36,10 +36,11 @@ function completeForm(password = 'secure-pass', confirmation = password) {
 
 describe('RegisterForm', () => {
   const registerAccountMock = vi.mocked(registerAccount);
+  const onLoginMock = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    render(<RegisterForm />);
+    render(<RegisterForm onLogin={onLoginMock} />);
   });
 
   it('solicita cuatro campos obligatorios y no permite adjuntar archivos', () => {
@@ -58,6 +59,12 @@ describe('RegisterForm', () => {
         'Regístrate para seguir las carreras y gestionar tu saldo de apuestas.',
       ),
     ).toBeInTheDocument();
+  });
+
+  it('permite abrir el inicio de sesión desde el formulario de registro', () => {
+    fireEvent.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
+
+    expect(onLoginMock).toHaveBeenCalledOnce();
   });
 
   it('rechaza contraseñas distintas sin invocar el servicio', async () => {

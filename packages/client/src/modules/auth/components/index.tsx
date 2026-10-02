@@ -8,7 +8,11 @@ import Typography from '@mui/material/Typography';
 import type { RegisteredUser, RegisterUserRequest } from '@app/shared';
 import { registerAccount } from '../services/index';
 
-export default function RegisterForm() {
+interface RegisterFormProps {
+  onLogin: () => void;
+}
+
+export default function RegisterForm({ onLogin }: RegisterFormProps) {
   const [error, setError] = useState('');
   const [createdUser, setCreatedUser] = useState<RegisteredUser | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,6 +73,9 @@ export default function RegisterForm() {
             </Typography>
           </div>
         </div>
+        <Button variant="contained" fullWidth onClick={onLogin}>
+          Iniciar sesión
+        </Button>
       </section>
     );
   }
@@ -127,7 +134,9 @@ export default function RegisterForm() {
         </Button>
       </form>
       <Typography component="p" className="privacy-note">
-        Tu perfil y saldo se guardarán en este dispositivo.
+        Tu perfil y saldo se guardarán en este dispositivo.{' '}
+        ¿Ya tienes cuenta?{' '}
+        <Button variant="text" onClick={onLogin}>Iniciar sesión</Button>
       </Typography>
     </section>
   );

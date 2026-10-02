@@ -1,7 +1,14 @@
+import { useState } from 'react'
+import type { RegisteredUser } from '@app/shared'
 import RegisterForm from './modules/auth/components'
+import LoginForm from './modules/auth/components/LoginForm'
+import Dashboard from './modules/dashboard/components/Dashboard'
 import './App.css'
 
 function App() {
+  const [view, setView] = useState<'register' | 'login' | 'dashboard'>('register')
+  const [user, setUser] = useState<RegisteredUser | null>(null)
+
   return (
     <main className="registration-page">
       <aside className="brand-panel">
@@ -16,7 +23,19 @@ function App() {
         <div className="brand-footer">La emoción de las carreras, a su propio ritmo.</div>
       </aside>
       <div className="form-stage">
-        <RegisterForm />
+        {view === 'register' && <RegisterForm onLogin={() => setView('login')} />}
+        {view === 'login' && (
+          <LoginForm
+            onLogin={(authenticatedUser) => {
+              setUser(authenticatedUser)
+              setView('dashboard')
+            }}
+            onRegister={() => setView('register')}
+          />
+        )}
+        {view === 'dashboard' && user && (
+          <Dashboard user={user} />
+        )}
       </div>
     </main>
   )

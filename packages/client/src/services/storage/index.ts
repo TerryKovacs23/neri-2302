@@ -33,3 +33,26 @@ export function saveRegisteredUser(user: RegisteredUser, password: string): void
 	const users = readUsers();
 	localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify([...users, storedUser]));
 }
+
+export function authenticateStoredUser(
+	email: string,
+	password: string,
+): RegisteredUser | null {
+	const normalizedEmail = email.trim().toLowerCase();
+	const user = readUsers().find(
+		(storedUser) =>
+			storedUser.email === normalizedEmail && storedUser.password === password,
+	);
+
+	if (!user) {
+		return null;
+	}
+
+	return {
+		id: user.id,
+		fullName: user.fullName,
+		email: user.email,
+		balance: user.balance,
+		createdAt: user.createdAt,
+	};
+}
